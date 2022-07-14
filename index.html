@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            text-align: center;
+            min-width: 1.5em;
+            max-width: 1.5em;
+            height: 1em;
+        }
+
+        .repeat-part {
+            background-color: rgba(175, 122, 228, 0.491);
+        }
+
+        .repeat-part-green {
+            background-color: greenyellow;
+        }
+
+        .exponent {
+            background-color: #58a2ec89;
+        }
+
+        .significance {
+            background-color: rgba(57, 204, 57, 0.352);
+        }
+
+        .negitive {
+            background-color: aqua;
+        }
+
+        .positive {
+            background-color: rgba(244, 115, 115, 0.442);
+        }
+
+        blockquote {
+            padding: 1.2em;
+            background-color: rgba(130, 126, 126, 0.175);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>"0.1"转为二进制</h1>
+    <pre>
+                0.1 * 2 = 0.2 ---记下整数部分：0 , 取小数部分：0.2
+             -> 0.2 * 2 = 0.4 ---记下整数部分：0 , 取小数部分：0.4     (mark here)
+                0.4 * 2 = 0.8 ---记下整数部分：0 , 取小数部分：0.8
+                0.8 * 2 = 1.6 ---记下整数部分：1 , 取小数部分：0.6
+                0.6 * 2 = 1.2 ---记下整数部分：1 , 取小数部分：0.2 
+             -> 0.2 * 2 = 0.4 ---记下整数部分：0 , 取小数部分：0.4     (mark here)
+                0.4 * 2 = 0.8 ---记下整数部分：0 , 取小数部分：0.8
+                0.8 * 2 = 1.6 ---记下整数部分：1 , 取小数部分：0.6
+                0.6 * 2 = 1.2 ---记下整数部分：1 , 取小数部分：0.2
+             -> ...repeat   
+    </pre>
+
+    <p>从上到下顺序取整数部分：</p>
+    <table border>
+        <thead>
+            <th>位置</th>
+            <td>1</td>
+            <td class="repeat-part">2</td>
+            <td class="repeat-part">3</td>
+            <td class="repeat-part">4</td>
+            <td class="repeat-part">5</td>
+            <td>6</td>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+            <td>...</td>
+        </thead>
+        <tr>
+            <th>值</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>...</td>
+        </tr>
+    </table>
+
+    <p>可发现，<strong>0.1转换为2进制是无限循环的！</strong>循环部分为0011</p>
+
+    <blockquote>
+        无限的小数，有限的内存位数，必然要对无限数进行<strong>截取</strong>!
+    </blockquote>
+
+
+    <hr>
+
+    上面只是计算了小数的小数部分的二进制，小数的二进制表示还需要加上整数部分，从而得到小数的表示：
+    <pre>
+        0.<u>0<strong>0011</strong>0011(0011循环)</u>
+    </pre>
+    带有下划线部分的便是小数的小数部分的二进制，小数点前面的是整数部分的二进制！
+
+
+    <hr>
+
+    <blockquote>
+        借助于10进制下的科学记数法，我们对2进制也进行科学记数法！
+    </blockquote>
+
+    对<code>0.0<strong>0011</strong>0011(0011循环)</code>进行科学记数法:
+
+    <br>
+
+    小数部分的左端有3个0，对应上表中位置1～3的0可以被左移去除：
+    <pre>
+        <code>
+        <del>0 00</del>11 0011 (0011循环)
+        </code>
+        <code>
+            11 0011 (0011循环)
+        </code>
+    </pre>
+
+
+
+
+    <table border>
+        <thead>
+            <th>位置</th>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+            <td>...</td>
+        </thead>
+        <tr>
+            <th>旧值</th>
+            <td>0</td>
+            <td class="repeat-part">0</td>
+            <td class="repeat-part">0</td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">1</td>
+            <td class="repeat-part-green">1</td>
+            <td>...</td>
+        </tr>
+        <tr>
+            <th>新值</th>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">1</td>
+            <td class="repeat-part-green">1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>...</td>
+        </tr>
+    </table>
+    <blockquote>
+        由于左移了3位，数值相当于放大了，那么需要对新值添加一个记数，表示其被左移了3位，还表示需要乘上-3位以缩小恢复到原值.<br>
+        注意,由于当前进制是2进制，因此底数位为2.
+
+    </blockquote>
+    <code>
+        0.11 0011 (0011循环) * 2<sup>-3</sup>
+    </code>
+
+    <hr>
+
+    <blockquote>
+        现在我们意已熟悉了“小数的进制转换“和”小数2进制下的科学记数法“。
+        <br>
+        是时候考虑如何将它们进行存储！
+    </blockquote>
+
+    <hr>
+
+    <h1>IEEE-754 <small>64位存储</small></h1>
+
+    <p>采用64位存储进行表述，这也是JavaScript的选择</p>
+
+    <table border>
+        <thead>
+            <td>1</td>
+            <td class="exponent">2</td>
+            <td class="exponent">3</td>
+            <td class="exponent">4</td>
+            <td class="exponent">5</td>
+            <td class="exponent">6</td>
+            <td class="exponent">7</td>
+            <td class="exponent">8</td>
+            <td class="exponent">9</td>
+            <td class="exponent">10</td>
+            <td class="exponent">11</td>
+            <td class="exponent">12</td>
+            <td class="significance">13</td>
+            <td class="significance">14</td>
+            <td class="significance">15</td>
+            <td class="significance">16</td>
+            <td class="significance">17</td>
+            <td class="significance">18</td>
+            <td class="significance">19</td>
+            <td class="significance">20</td>
+            <td class="significance">21</td>
+            <td class="significance">22</td>
+            <td class="significance">23</td>
+            <td class="significance">24</td>
+            <td class="significance">25</td>
+            <td class="significance">26</td>
+            <td class="significance">27</td>
+            <td class="significance">28</td>
+            <td class="significance">29</td>
+            <td class="significance">30</td>
+            <td class="significance">31</td>
+            <td class="significance">32</td>
+            <td class="significance">33</td>
+            <td class="significance">34</td>
+            <td class="significance">35</td>
+            <td class="significance">36</td>
+            <td class="significance">37</td>
+            <td class="significance">38</td>
+            <td class="significance">39</td>
+            <td class="significance">40</td>
+            <td class="significance">41</td>
+            <td class="significance">42</td>
+            <td class="significance">43</td>
+            <td class="significance">44</td>
+            <td class="significance">45</td>
+            <td class="significance">46</td>
+            <td class="significance">47</td>
+            <td class="significance">48</td>
+            <td class="significance">49</td>
+            <td class="significance">50</td>
+            <td class="significance">51</td>
+            <td class="significance">52</td>
+            <td class="significance">53</td>
+            <td class="significance">54</td>
+            <td class="significance">55</td>
+            <td class="significance">56</td>
+            <td class="significance">57</td>
+            <td class="significance">58</td>
+            <td class="significance">59</td>
+            <td class="significance">60</td>
+            <td class="significance">61</td>
+            <td class="significance">62</td>
+            <td class="significance">63</td>
+            <td class="significance">64</td>
+        </thead>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <p>
+        表中，坐起‘第1位’是符号位，蓝色的2～12是指数位，13～64是有效小数位。
+    </p>
+
+    由于有效小数位的限制，因此面对像0.1这种二进制无限位的，只能尽可能多的截取，因此，加入科学记数法之前，目前应截取52位：
+
+
+    <table border>
+        <thead>
+            <td>1</td>
+            <td class="exponent">2</td>
+            <td class="exponent">3</td>
+            <td class="exponent">4</td>
+            <td class="exponent">5</td>
+            <td class="exponent">6</td>
+            <td class="exponent">7</td>
+            <td class="exponent">8</td>
+            <td class="exponent">9</td>
+            <td class="exponent">10</td>
+            <td class="exponent">11</td>
+            <td class="exponent">12</td>
+            <td class="significance">13</td>
+            <td class="significance">14</td>
+            <td class="significance">15</td>
+            <td class="significance">16</td>
+            <td class="significance">17</td>
+            <td class="significance">18</td>
+            <td class="significance">19</td>
+            <td class="significance">20</td>
+            <td class="significance">21</td>
+            <td class="significance">22</td>
+            <td class="significance">23</td>
+            <td class="significance">24</td>
+            <td class="significance">25</td>
+            <td class="significance">26</td>
+            <td class="significance">27</td>
+            <td class="significance">28</td>
+            <td class="significance">29</td>
+            <td class="significance">30</td>
+            <td class="significance">31</td>
+            <td class="significance">32</td>
+            <td class="significance">33</td>
+            <td class="significance">34</td>
+            <td class="significance">35</td>
+            <td class="significance">36</td>
+            <td class="significance">37</td>
+            <td class="significance">38</td>
+            <td class="significance">39</td>
+            <td class="significance">40</td>
+            <td class="significance">41</td>
+            <td class="significance">42</td>
+            <td class="significance">43</td>
+            <td class="significance">44</td>
+            <td class="significance">45</td>
+            <td class="significance">46</td>
+            <td class="significance">47</td>
+            <td class="significance">48</td>
+            <td class="significance">49</td>
+            <td class="significance">50</td>
+            <td class="significance">51</td>
+            <td class="significance">52</td>
+            <td class="significance">53</td>
+            <td class="significance">54</td>
+            <td class="significance">55</td>
+            <td class="significance">56</td>
+            <td class="significance">57</td>
+            <td class="significance">58</td>
+            <td class="significance">59</td>
+            <td class="significance">60</td>
+            <td class="significance">61</td>
+            <td class="significance">62</td>
+            <td class="significance">63</td>
+            <td class="significance">64</td>
+        </thead>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+    </table>
+
+    <blockquote>
+        到此，存入小数还很自然，我们唯一的遗憾是失去0.1的精度，但是这是无法避免的，因为无限是真实，用有限存储无限，必然会存在一定缺失
+    </blockquote>
+
+    <p>为了在有限的52位中尽可能多的存储一些数据，再结合科学记数法中的智慧，我们可以这样做：</p>
+    <p>
+    <ol>
+        <li>13、14、15位数为0，</li>
+        <li>想要存储更多的后面小数位信息</li>
+    </ol>
+    </p>
+    <p>
+        因此，我们何不将前面的三个0舍弃，全部小数位向左移动，这样后面就能多出三个空余位来再存储一些信息：
+    </p>
+
+    <table border>
+        <thead>
+            <td>1</td>
+            <td class="exponent">2</td>
+            <td class="exponent">3</td>
+            <td class="exponent">4</td>
+            <td class="exponent">5</td>
+            <td class="exponent">6</td>
+            <td class="exponent">7</td>
+            <td class="exponent">8</td>
+            <td class="exponent">9</td>
+            <td class="exponent">10</td>
+            <td class="exponent">11</td>
+            <td class="exponent">12</td>
+            <td class="significance">13</td>
+            <td class="significance">14</td>
+            <td class="significance">15</td>
+            <td class="significance">16</td>
+            <td class="significance">17</td>
+            <td class="significance">18</td>
+            <td class="significance">19</td>
+            <td class="significance">20</td>
+            <td class="significance">21</td>
+            <td class="significance">22</td>
+            <td class="significance">23</td>
+            <td class="significance">24</td>
+            <td class="significance">25</td>
+            <td class="significance">26</td>
+            <td class="significance">27</td>
+            <td class="significance">28</td>
+            <td class="significance">29</td>
+            <td class="significance">30</td>
+            <td class="significance">31</td>
+            <td class="significance">32</td>
+            <td class="significance">33</td>
+            <td class="significance">34</td>
+            <td class="significance">35</td>
+            <td class="significance">36</td>
+            <td class="significance">37</td>
+            <td class="significance">38</td>
+            <td class="significance">39</td>
+            <td class="significance">40</td>
+            <td class="significance">41</td>
+            <td class="significance">42</td>
+            <td class="significance">43</td>
+            <td class="significance">44</td>
+            <td class="significance">45</td>
+            <td class="significance">46</td>
+            <td class="significance">47</td>
+            <td class="significance">48</td>
+            <td class="significance">49</td>
+            <td class="significance">50</td>
+            <td class="significance">51</td>
+            <td class="significance">52</td>
+            <td class="significance">53</td>
+            <td class="significance">54</td>
+            <td class="significance">55</td>
+            <td class="significance">56</td>
+            <td class="significance">57</td>
+            <td class="significance">58</td>
+            <td class="significance">59</td>
+            <td class="significance">60</td>
+            <td class="significance">61</td>
+            <td class="significance">62</td>
+            <td class="significance">63</td>
+            <td class="significance">64</td>
+        </thead>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>0</td>
+            <td class="repeat-part">0</td>
+            <td class="repeat-part">0</td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">1</td>
+            <td class="repeat-part-green">1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part">1</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">0</td>
+            <td class="repeat-part-green">1</td>
+            <td class="repeat-part-green">1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td style="background-color: yellow;">1</td>
+            <td style="background-color: yellow;">0</td>
+            <td style="background-color: yellow;">0</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <p>
+        这样做，显然是有效的，只还差了一步——“移动记数”，如上目所言，左移了3位，它的记数标记是<code>2<sup>-3</sup></code>,基数永远是2，<strong>对于不变的，我们可以采用约定</strong>，而避免使用数据位进行存储以浪费有限的资源。
+    </p>
+    <p>
+        真正需要我们存入的，是指数部分的数，它是根据数值的不同产生不同的结果，因此我们应该想办法将其存入位置2～12之间的11位空间内：
+    </p>
+    <p>
+    <pre>
+            3的二进制(2位） ：<code>           11</code><br>
+            3的二进制(4位） ：<code>         0011</code><br>
+            3的二进制(8位） ：<code>    0000 0011</code><br>
+            3的二进制(11位）：<code>000 0000 0011</code><br>
+        </pre>
+    显然我们要采用最后一种！它满足了位数，那么按照11位来计算，指数部分可以表示的数值有：2048<strong>个</strong>数值
+    </p>
+
+    <blockquote>
+        注意！ 我说的是：<code>数值个数是2048</code>，不是说最大数是2048！指数部分能表示的数值为：<br>
+        0、1、2、...、2047这两千零四十八个数！
+    </blockquote>
+
+    <p>
+        那么问题就来了，显然：<br>
+        1. 目前的存法无法存入一个负数；<br>
+        2. 存入的数值是有限个的，而且好像太少了！
+    </p>
+
+    <p>
+        引入负数是一个相对麻烦的事，我们先考虑一下第2个问题:<br>
+        要知道，位数是不可扩展，这意味着我们无法通过扩展位数来增加可存入的数值。我们需要考虑一下问题的环境和它的背景，不能一味地寻求扩充<br>
+        由于该部分的数是指数的部分，要知道指数的一位变化，带来的影响远不止1的变化:
+    </p>
+
+    <p>
+    <pre>
+            1*2<sup>1</sup>    =          1<sub>(2)</sub> = 1<sub>(10)</sub>
+            1*2<sup>2</sup>    =         10<sub>(2)</sub> = 2<sub>(10)</sub>
+            1*3<sup>2</sup>    =        100<sub>(2)</sub> = 8<sub>(10)</sub>
+            ...
+            1*2<sup>10</sup>   = 1000000000<sub>(2)</sub> = 512<sub>(10)</sub>
+            ...
+            1*2<sup>2047</sup> = 10000...00000<sub>(2)</sub> = 至少有几百位数<sub>(10)</sub>
+        </pre>
+    </p>
+
+    <p>
+        如此看来，现有的11位指数位，已经能使数的量级达到几百位（我甚至不知道那个单位叫啥），那么数的范围已经相当（不）可观<br>
+        所以，2048个数已经不少了！
+    </p>
+
+    <blockquote>
+        76个单位：<br>
+        个、十、百、千、万、十万、百万、千万、亿、十亿、百亿、千亿
+        、兆、十兆、百兆、千兆、京、十京、百京、千京、垓(gāi)、十垓、百垓、千垓、秭(zǐ)、十秭、百秭、千秭、穰(ráng)、十穰、百穰、千穰、沟、十沟、百沟、千沟、涧、十涧、百涧、千涧、正、十正、百正、千正、载、十载、百载、千载、极、十极、百极、千极、恒河沙、十恒河沙、百恒河沙、千恒河沙、阿僧祗(zhī)、十阿僧祗、百阿僧祗、千阿僧祗、那由他、十那由他、百那由他、千那由他、不可思议、十不可思议、百不可思议、千不可思议、
+        无量、十无量、百无量、千无量、大数、十大数、百大数、千大数。
+    </blockquote>
+
+    <p>
+        解决了数值范围的顾虑，我们来解决负数的问题：
+    </p>
+
+    <p>
+        我们知道，通常表示一个数的正负需要使用一个符号位，而稀缺的11位可不能就这样为了一个只表示正负的0或1而放弃一个量级的数。<br>
+        为此，我们希望有一个方案，在既能保证不浪费位数，从而确保数的量级能得得以保障，又能反应出数的正负。
+    </p>
+
+    <p>
+        即然2048个数那么多，且2047所能呈现的数值那么大，大到难以想象甚至难以使用，何不分出一半的数，一半来表示整数，一半来表示负数。<br>
+        要知道从0到2047，每一个数的二进制编码都是独一无二的，<del>前一半的数我们依然让它表示自己，该是多少还是多少，后一半的数开始，让它们代表负的0到1023</del>。<br>
+        这样似乎是可行的，即兼顾了正负的表示，又保障了位数的使用，唯一的损失是指所所能代表的最大数从2047降到了1023。这似乎是可以接受的。
+    </p>
+
+    <p>根据上面的思想，我们只需确定好划分位置，将2048个数进行一分为二，一部分表示正数,另一部分表示负数即可！</p>
+
+    <p>
+        显然，我的切分方案想法是有问题的，但是这种切分再分配的思想是有效的。IEEE-754规定，使用更专业、更有利于运算的<strong>偏移</strong>方案：
+        它规定了一个数，让每一个实际数值都加上这个数，使用加和后的数进行进制转换然后存入11位指数部分：
+    </p>
+    <pre>
+            实际二进制编码 = 二进制编码（实际值 + 规定数值）
+    </pre>
+
+    <p>而这个规定数值的确定，考虑到了位数的影响，它的公式为<code>2<sup>e-1</sup>-1</code>,e是便是位数，在这里e==11,那么求得的规定值便是1023。<br></p>
+
+
+    <blockquote>
+        这里需要说明的是，11位的存储位本身已经限制了数值的有效范围，超出这个范围的数是无法表示的，IEEE对超出的数都做了统一的定义，因此我们在这里讨论的，基本上都是有效范围内的数，一旦数值超出了有效范围，就将它们纳入超出部分的定义！<br>
+    </blockquote>
+
+    <p>
+        这个加上规定数值的操作，形成的直观影响就是对数进行了偏移，如下两表所示：
+    </p>
+    <p>
+        在进行偏移之前，有效的数值范围是0～19，无法表示出负数。<br>
+        而加入了偏移值后，负数的部分也可以用原本的红色区域进行表示，我们的仅有的损失只是正数的数值范围丢失了一半
+    </p>
+
+    <table border>
+        <tr>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+        </tr>
+        <thead>
+            <td class="negitive">-9</td>
+            <td class="negitive">-8</td>
+            <td class="negitive">-7</td>
+            <td class="negitive">-6</td>
+            <td class="negitive">-5</td>
+            <td class="negitive">-4</td>
+            <td class="negitive">-3</td>
+            <td class="negitive">-2</td>
+            <td class="negitive">-1</td>
+            <td class="" style="background-color: yellow;">0</td>
+            <td class="positive">1</td>
+            <td class="positive">2</td>
+            <td class="positive">3</td>
+            <td class="positive">4</td>
+            <td class="positive">5</td>
+            <td class="positive">6</td>
+            <td class="positive">7</td>
+            <td class="positive">8</td>
+            <td class="positive">9</td>
+            <td class="positive">10</td>
+            <td class="positive">11</td>
+            <td class="positive">12</td>
+            <td class="positive">13</td>
+            <td class="positive">14</td>
+            <td class="positive">15</td>
+            <td class="positive">16</td>
+            <td class="positive">17</td>
+            <td class="positive">18</td>
+            <td class="positive">19</td>
+        </thead>
+    </table>
+    <table border>
+        <tr>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>无效编码</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+            <td>有效</td>
+        </tr>
+        <thead>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class="negitive">-9</td>
+            <td class="negitive">-8</td>
+            <td class="negitive">-7</td>
+            <td class="negitive">-6</td>
+            <td class="negitive">-5</td>
+            <td class="negitive">-4</td>
+            <td class="negitive">-3</td>
+            <td class="negitive">-2</td>
+            <td class="negitive">-1</td>
+            <td class="" style="background-color: yellow;">0</td>
+            <td class="positive">0</td>
+            <td class="positive">1</td>
+            <td class="positive">2</td>
+            <td class="positive">3</td>
+            <td class="positive">4</td>
+            <td class="positive">5</td>
+            <td class="positive">6</td>
+            <td class="positive">7</td>
+            <td class="positive">8</td>
+            <td class="positive">9</td>
+        </thead>
+    </table>
+
+    <hr>
+
+    <blockquote>
+        小数的存入基本完成。但是这只能算是IEEE 754的一个雏形，里面还有很多细节部分没有发现和解决，因为其涉及到数的比较、运算等后续操作，相对复杂。
+    </blockquote>
+
+    <hr>
+
+    <h1>小结</h1>
+    <pre>
+        小数 ---> 二进制 ---> 移位+指数偏移 
+    </pre>
+    <hr>
+
+    <h1>细节</h1>
+
+
+    <hr>
+
+    <footer>
+        <h1>How I Made it</h1>
+        <h2>articles</h2>
+        <ul>
+            <li>
+                <a href="https://zh.wikipedia.org/wiki/IEEE_754">最好先了解一下IEEE-754（维基）</a>
+            </li>
+            <li>
+                <a target="_blank"
+                    href="https://github.com/qufei1993/Nodejs-Roadmap/blob/master/docs/javascript/floating-point-number-0.1-0.2.md">【主要】JavaScript
+                    浮点数之迷：0.1 + 0.2 为什么不等于 0.3？</a>
+            </li>
+        </ul>
+        <h2>tools</h2>
+        <ul>
+            <li><a target="_blank"
+                    href="https://babbage.cs.qc.cuny.edu/IEEE-754.old/Decimal.html">以可视化数字看小数如何以IEEE754存储</a></li>
+            <li><a target="_blank"
+                    href="http://binaryconvert.com/result_double.html?decimal=048046049">以可视化色块看小数如何以IEEE754存储</a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>
